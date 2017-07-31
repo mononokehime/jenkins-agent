@@ -7,16 +7,16 @@
 # and https://github.com/frol/docker-alpine-glibc/blob/master/Dockerfile
 # Installs the following software:
 # openjdk8-jre python py-pip git maven openssh ca-certificates openssl docker-compose swarm-client (jenkins)
-# sonar-runner
+# sonar-runner aws
 ###
 ## To build:
 # docker build -t jenkins-swarm-agent-docker:1.0.1 .
 ## To run, with login:
-# docker run -it --name jenkins-agent jenkins-swarm-agent-docker:1.0.0
+# docker run -it --name jenkins-agent jenkins-swarm-agent-docker
 # To run as a service
 # docker service create --network ci-network --with-registry-auth --secret jenkins-user --secret jenkins-pass --name jenkins-agent 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.3
 ## To run in background:
-# docker run -d --name jenkins-master jenkins-swarm-agent-docker:1.0.0
+# docker run -d --name jenkins-agent jenkins-swarm-agent-docker:1.0.0
 ## To login when running
 # docker exec -i -t (containerId) bash # obtain the containerId from docker ps
 ## to tag for pushing to aws, e.g.
@@ -195,11 +195,12 @@ COPY run-agent.sh /run-agent.sh
 RUN chmod +x /run-agent.sh
 
 ### Install AWS
-RUN curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
+RUN wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 RUN unzip awscli-bundle.zip
 RUN ./awscli-bundle/install -b ~/bin/aws
 
-RUN echo $PATH | grep ~/bin
-RUN export PATH=~/bin:$PATH
+ENV AWS_HOME=/root/bin
+
+ENV PATH $PATH:$AWS_HOME
 
 CMD ["/run-agent.sh"]
