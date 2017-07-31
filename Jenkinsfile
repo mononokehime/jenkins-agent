@@ -17,10 +17,14 @@ pipeline {
             }
         stage ('Docker Publish') {
             steps {
-                script {
-                    docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr-credentials') {
-                    docker.image('jenkins-swarm-agent-docker').push('latest')
-                    }
+                sh 'aws ecr get-login --no-include-email --region ap-northeast-1 | sh'
+                // ${env.BUILD_ID}
+                sh 'docker tag jenkins-swarm-agent-docker 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:latest'
+                sh 'docker push 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:latest'
+              //  script {
+              //      docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr-credentials') {
+              //      docker.image('jenkins-swarm-agent-docker').push('latest')
+              //      }
                 }
             }
             post {
@@ -29,6 +33,11 @@ pipeline {
                     echo "Success"
                 }
             }
+        }
+    }
+    post {
+        always {
+            // something to clean up images
         }
     }
     // The options directive is for configuration that applies to the whole job.
