@@ -1,12 +1,9 @@
 pipeline {
     agent any
     stages {
-        stage ('Initialize') {
+        stage ('Check out') {
             steps {
-                sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
-                '''
+                checkout([$class: 'GitSCM', branches: [[name: 'any']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3ebab8f6-e86d-4e5c-8d8e-6bdaf0d517de', url: 'https://github.com/mononokehime/jenkins-agent.git']]])
             }
         }
     }
