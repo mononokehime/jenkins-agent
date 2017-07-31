@@ -18,7 +18,7 @@ pipeline {
         stage ('Docker Publish') {
             steps {
                 script {
-                    docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr:ap-northeast-1:fergusmacdermot') {
+                    docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr-credentials') {
                     docker.image('jenkins-swarm-agent-docker').push('latest')
                     }
                 }
@@ -35,7 +35,7 @@ pipeline {
     options {
         // For example, we'd like to make sure we only keep 10 builds at a time, so
         // we don't fill up our storage!
-        buildDiscarder(logRotator(numToKeepStr:'10'))
+        buildDiscarder(logRotator(numToKeepStr:'5'))
 
         // And we'd really like to be sure that this build doesn't hang forever, so
         // let's time it out after an hour.

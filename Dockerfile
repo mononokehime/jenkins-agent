@@ -10,11 +10,11 @@
 # sonar-runner aws
 ###
 ## To build:
-# docker build -t jenkins-swarm-agent-docker:1.0.1 .
+# docker build -t jenkins-swarm-agent-docker .
 ## To run, with login:
-# docker run -it --name jenkins-agent jenkins-swarm-agent-docker
+# docker run -it --name jenkins-agent-1 -e AWS_ACCESS_KEY=aws_access_key_id jenkins-swarm-agent-docker
 # To run as a service
-# docker service create --network ci-network --with-registry-auth --secret jenkins-user --secret jenkins-pass --name jenkins-agent 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.3
+# docker service create --network ci-network --with-registry-auth -e AWS_ACCESS_KEY=aws_access_key_id -e AWS_SECRET_ACCESS_KEY=aws_secret_access_key --secret aws_access_key_id --secret aws_secret_access_key --name jenkins-agent jenkins-swarm-agent-docker:latest
 ## To run in background:
 # docker run -d --name jenkins-agent jenkins-swarm-agent-docker:1.0.0
 ## To login when running
@@ -191,9 +191,6 @@ RUN chmod +x /apps/sonar-runner/bin/sonar-runner
 
 COPY sonar-scanner.properties /apps/sonar-runner/conf/sonar-scanner.properties
 
-COPY run-agent.sh /run-agent.sh
-RUN chmod +x /run-agent.sh
-
 ### Install AWS
 RUN wget "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip"
 RUN unzip awscli-bundle.zip
@@ -202,5 +199,8 @@ RUN ./awscli-bundle/install -b ~/bin/aws
 ENV AWS_HOME=/root/bin
 
 ENV PATH $PATH:$AWS_HOME
+
+COPY run-agent.sh /run-agent.sh
+RUN chmod +x /run-agent.sh
 
 CMD ["/run-agent.sh"]
