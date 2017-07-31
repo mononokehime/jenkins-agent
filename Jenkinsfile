@@ -23,8 +23,8 @@ pipeline {
         steps {
             docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr:ap-northeast-1:ecr-credentials') {
             docker.image('jenkins-swarm-agent-docker').push('latest')
+            }
         }
-
         post {
             success {
 
