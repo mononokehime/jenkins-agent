@@ -27,8 +27,7 @@ pipeline {
               //      docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr-credentials') {
               //      docker.image('jenkins-swarm-agent-docker').push('latest')
               //      }
-
-                }
+              //  }
             }
             post {
                 success {
