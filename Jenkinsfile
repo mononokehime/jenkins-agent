@@ -4,24 +4,28 @@ pipeline {
         stage ('Check out') {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: 'any']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '3ebab8f6-e86d-4e5c-8d8e-6bdaf0d517de', url: 'https://github.com/mononokehime/jenkins-agent.git']]])
+                }
             }
-        }
         stage ('Docker Build') {
             steps {
-                docker.build('jenkins-swarm-agent-docker')
-            }
+                script {
+                    docker.build('jenkins-swarm-agent-docker')
+                    }
+                }
 
             post {
                 success {
 
                     echo "Success"
+                    }
                 }
             }
-        }
         stage ('Docker Publish') {
             steps {
-                docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr:ap-northeast-1:ecr-credentials') {
-                docker.image('jenkins-swarm-agent-docker').push('latest')
+                script {
+                    docker.withRegistry('https://667203200330.dkr.ecr.ap-northeast-1.amazonaws.com', 'ecr:ap-northeast-1:ecr-credentials') {
+                    docker.image('jenkins-swarm-agent-docker').push('latest')
+                    }
                 }
             }
             post {
