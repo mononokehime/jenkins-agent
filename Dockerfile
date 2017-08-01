@@ -20,9 +20,9 @@
 ## To login when running
 # docker exec -i -t (containerId) bash # obtain the containerId from docker ps
 ## to tag for pushing to aws, e.g.
-# docker tag jenkins-swarm-agent-docker:1.0.1 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.1
+# docker tag jenkins-swarm-agent-docker 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.5
 ## to push to aws
-# docker push 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.1
+# docker push 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.5
 ## to pull from aws
 # docker pull 667203200330.dkr.ecr.ap-northeast-1.amazonaws.com/jenkins-swarm-agent-docker:1.0.1
 ################################################
